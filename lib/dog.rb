@@ -25,6 +25,10 @@ class Dog
         self
     end
 
+    def update
+        self.save
+    end
+
     #CLASS METHODS
     def self.create_table
         sql = <<-SQL 
@@ -76,6 +80,12 @@ class Dog
         SQL
         self.new_from_db(self.send(sql)[0])
     end
+
+    def self.find_or_create_by(name:, breed:)
+        dog = self.all.find {|d| d.name == name && d.breed == breed}
+        dog ? dog : self.create(name: name, breed: breed)
+    end
+
 
     private
 
